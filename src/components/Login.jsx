@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react'
-import useAuth from '../hooks/useAuth'
 
-export default function Login({ onLoginSuccess, onBack }) {
-  const { loading, error, signIn, signUp, setError } = useAuth()
+export default function Login({
+  onLoginSuccess,
+  onBack,
+  signIn,
+  signUp,
+  loading,
+  error
+}) {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

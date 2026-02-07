@@ -16,33 +16,50 @@ function App() {
   const [role, setRole] = useState(null)
   const [menu, setMenu] = useState('produk')
   const [editingId, setEditingId] = useState(null)
-  const { isAuthenticated, checkAuth, signOut } = useAuth()
 
-  // Check authentication status on mount
+  const {
+    isAuthenticated,
+    checkAuth,
+    signOut,
+    signIn,
+    signUp,
+    loading: authLoading,
+    error: authError
+  } = useAuth()
+
   useEffect(() => {
     checkAuth()
   }, [])
-  
-  const { products, loading, error, addProduct, updateProduct, deleteProduct } = useProducts()
+
+  const {
+    products,
+    loading: productsLoading,
+    error: productsError,
+    addProduct,
+    updateProduct,
+    deleteProduct
+  } = useProducts()
+
   const { transactions, addTransaction } = useTransactions()
 
   if (!role) {
     return <RoleSelection setRole={setRole} />
   }
 
-  // Show login for admin users
   if (role === 'admin' && !isAuthenticated) {
     return (
       <Login
-        onLoginSuccess={() => {
-          // Already authenticated after login
-        }}
+        signIn={signIn}
+        signUp={signUp}
+        loading={authLoading}
+        error={authError}
+        onLoginSuccess={() => {}}
         onBack={() => setRole(null)}
       />
     )
   }
 
-  if (loading) {
+  if (productsLoading) {
     return (
       <div style={{
         minHeight: "100vh",
@@ -60,7 +77,7 @@ function App() {
     )
   }
 
-  if (error) {
+  if (productsError) {
     return (
       <div style={{
         minHeight: "100vh",
@@ -72,8 +89,9 @@ function App() {
       }}>
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "3rem", margin: 0 }}>⚠️</p>
-          <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>Error: {error}</p>
-          <p style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>Periksa setup Supabase Anda di file SUPABASE_SETUP.md</p>
+          <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>
+            Error: {productsError?.message || 'Terjadi kesalahan'}
+          </p>
         </div>
       </div>
     )
@@ -81,43 +99,47 @@ function App() {
 
   return (
     <div>
-      <Navbar 
-        setMenu={setMenu} 
+      <Navbar
+        setMenu={setMenu}
         role={role}
         onLogout={() => {
           signOut()
           setRole(null)
         }}
       />
-      
+
       {role === 'customer' ? (
         <ProductGallery products={products} />
       ) : (
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
           {menu === 'produk' && (
             <>
-              <ProductForm 
-                products={products} 
+              <ProductForm
+                products={products}
                 addProduct={addProduct}
                 updateProduct={updateProduct}
                 editingId={editingId}
                 onEditComplete={() => setEditingId(null)}
               />
-              <ProductList 
-                products={products} 
+              <ProductList
+                products={products}
                 deleteProduct={deleteProduct}
                 onEdit={(id) => setEditingId(id)}
               />
             </>
           )}
+
           {menu === 'transaksi' && (
-            <Transaction 
-              products={products} 
+            <Transaction
+              products={products}
               transactions={transactions}
               addTransaction={addTransaction}
             />
           )}
-          {menu === 'laporan' && <Report transactions={transactions} />}
+
+          {menu === 'laporan' && (
+            <Report transactions={transactions} />
+          )}
         </div>
       )}
     </div>
