@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function Transaction({ products, transactions, addTransaction }) {

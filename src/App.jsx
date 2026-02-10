@@ -1,21 +1,28 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import useProducts from './hooks/useProducts'
-import useTransactions from './hooks/useTransactions'
-import useAuth from './hooks/useAuth'
-import RoleSelection from './components/RoleSelection'
-import Login from './components/Login'
-import Navbar from './components/Navbar'
-import ProductForm from './components/ProductForm'
-import ProductList from './components/ProductList'
-import ProductGallery from './components/ProductGallery'
-import Transaction from './components/Transaction'
-import Report from './components/Report'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import "./App.css";
+
+import useProducts from "./hooks/useProducts";
+import useTransactions from "./hooks/useTransactions";
+import useAuth from "./hooks/useAuth";
+
+import RoleSelection from "./components/RoleSelection";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
+import ProductForm from "./components/ProductForm";
+import ProductList from "./components/ProductList";
+import ProductGallery from "./components/ProductGallery";
+import Transaction from "./components/Transaction";
+import Report from "./components/Report";
+
+import CheckoutPage from "./components/checkout/CheckoutPage";
+import ReviewOrder from "./components/ReviewOrder";
+import PaymentMethod from "./components/checkout/PaymentMethod";
 
 function App() {
-  const [role, setRole] = useState(null)
-  const [menu, setMenu] = useState('produk')
-  const [editingId, setEditingId] = useState(null)
+  const [role, setRole] = useState(null);
+  const [menu, setMenu] = useState("produk");
+  const [editingId, setEditingId] = useState(null);
 
   const {
     isAuthenticated,
@@ -24,12 +31,12 @@ function App() {
     signIn,
     signUp,
     loading: authLoading,
-    error: authError
-  } = useAuth()
+    error: authError,
+  } = useAuth();
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
   const {
     products,
@@ -37,16 +44,16 @@ function App() {
     error: productsError,
     addProduct,
     updateProduct,
-    deleteProduct
-  } = useProducts()
+    deleteProduct,
+  } = useProducts();
 
-  const { transactions, addTransaction } = useTransactions()
+  const { transactions, addTransaction } = useTransactions();
 
   if (!role) {
-    return <RoleSelection setRole={setRole} />
+    return <RoleSelection setRole={setRole} />;
   }
 
-  if (role === 'admin' && !isAuthenticated) {
+  if (role === "admin" && !isAuthenticated) {
     return (
       <Login
         signIn={signIn}
@@ -56,94 +63,81 @@ function App() {
         onLoginSuccess={() => {}}
         onBack={() => setRole(null)}
       />
-    )
+    );
   }
 
   if (productsLoading) {
-    return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #1e88e5 0%, #1565c0 100%)",
-        color: "white"
-      }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "3rem", margin: 0 }}>⏳</p>
-          <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>Memuat data...</p>
-        </div>
-      </div>
-    )
+    return <div>Loading...</div>;
   }
 
   if (productsError) {
-    return (
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "linear-gradient(135deg, #e53935 0%, #c62828 100%)",
-        color: "white"
-      }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "3rem", margin: 0 }}>⚠️</p>
-          <p style={{ fontSize: "1.2rem", marginTop: "1rem" }}>
-            Error: {productsError?.message || 'Terjadi kesalahan'}
-          </p>
-        </div>
-      </div>
-    )
+    return <div>Error: {productsError?.message}</div>;
   }
 
   return (
-    <div>
-      <Navbar
-        setMenu={setMenu}
-        role={role}
-        onLogout={() => {
-          signOut()
-          setRole(null)
-        }}
-      />
+    <BrowserRouter>
+      <Routes>
 
-      {role === 'customer' ? (
-        <ProductGallery products={products} />
-      ) : (
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
-          {menu === 'produk' && (
-            <>
-              <ProductForm
-                products={products}
-                addProduct={addProduct}
-                updateProduct={updateProduct}
-                editingId={editingId}
-                onEditComplete={() => setEditingId(null)}
+        {/* halaman checkout */}
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/review" element={<ReviewOrder />} />
+        <Route path="/payment" element={<PaymentMethod />} />
+
+        {/* halaman utama */}
+        <Route
+          path="*"
+          element={
+            <div>
+              <Navbar
+                setMenu={setMenu}
+                role={role}
+                onLogout={() => {
+                  signOut();
+                  setRole(null);
+                }}
               />
-              <ProductList
-                products={products}
-                deleteProduct={deleteProduct}
-                onEdit={(id) => setEditingId(id)}
-              />
-            </>
-          )}
 
-          {menu === 'transaksi' && (
-            <Transaction
-              products={products}
-              transactions={transactions}
-              addTransaction={addTransaction}
-            />
-          )}
+              {role === "customer" ? (
+                <ProductGallery products={products} />
+              ) : (
+                <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
+                  {menu === "produk" && (
+                    <>
+                      <ProductForm
+                        products={products}
+                        addProduct={addProduct}
+                        updateProduct={updateProduct}
+                        editingId={editingId}
+                        onEditComplete={() => setEditingId(null)}
+                      />
+                      <ProductList
+                        products={products}
+                        deleteProduct={deleteProduct}
+                        onEdit={(id) => setEditingId(id)}
+                      />
+                    </>
+                  )}
 
-          {menu === 'laporan' && (
-            <Report transactions={transactions} />
-          )}
-        </div>
-      )}
-    </div>
-  )
+                  {menu === "transaksi" && (
+                    <Transaction
+                      products={products}
+                      transactions={transactions}
+                      addTransaction={addTransaction}
+                    />
+                  )}
+
+                  {menu === "laporan" && (
+                    <Report transactions={transactions} />
+                  )}
+                </div>
+              )}
+            </div>
+          }
+        />
+
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
