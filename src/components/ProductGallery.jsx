@@ -45,7 +45,7 @@ export default function ProductGallery({ products }) {
       alert("Keranjang kosong");
       return;
     }
-    navigate("/review", { state: { cart } });
+    navigate("/checkout", { state: { cart } });
   };
 
   return (

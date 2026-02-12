@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 export default function useCheckout() {
+
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -27,16 +28,16 @@ export default function useCheckout() {
         total: totalAmount,
       };
 
-      console.log("Checkout Data:", payload);
+      console.log(payload);
 
       // nanti disini bisa masuk API / supabase
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       clearCart();
       alert("Checkout berhasil!");
+
     } catch (err) {
       console.error(err);
-      alert("Checkout gagal");
     } finally {
       setLoading(false);
     }
@@ -48,5 +49,6 @@ export default function useCheckout() {
     loading,
     addToCart,
     submitCheckout,
+    clearCart
   };
 }

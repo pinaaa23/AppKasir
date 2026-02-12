@@ -16,8 +16,6 @@ import Transaction from "./components/Transaction";
 import Report from "./components/Report";
 
 import CheckoutPage from "./components/checkout/CheckoutPage";
-import ReviewOrder from "./components/ReviewOrder";
-import PaymentMethod from "./components/checkout/PaymentMethod";
 
 function App() {
   const [role, setRole] = useState(null);
@@ -80,8 +78,6 @@ function App() {
 
         {/* halaman checkout */}
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/review" element={<ReviewOrder />} />
-        <Route path="/payment" element={<PaymentMethod />} />
 
         {/* halaman utama */}
         <Route
@@ -98,6 +94,7 @@ function App() {
               />
 
               {role === "customer" ? (
+                
                 <ProductGallery products={products} />
               ) : (
                 <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "2rem 1rem" }}>
