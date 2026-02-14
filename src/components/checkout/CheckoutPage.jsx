@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import ReviewOrder from "../ReviewOrder";
 import CustomerForm from "./CustomerForm";
-import PaymentMethod from "./PaymentMethod"
+import PaymentMethod from "./PaymentMethod";
 
 export default function CheckoutPage() {
 
@@ -20,17 +20,12 @@ export default function CheckoutPage() {
       padding:"30px"
     }}>
 
-      <h2>Checkout</h2>
-
       {/* STEP 1 */}
       {step === 1 && (
-        <>
-          <ReviewOrder cart={cartItems} />
-
-          <button onClick={()=>setStep(2)}>
-            Lanjut
-          </button>
-        </>
+        <ReviewOrder
+          cart={cartItems}
+          onNext={()=>setStep(2)}
+        />
       )}
 
       {/* STEP 2 */}
@@ -42,25 +37,17 @@ export default function CheckoutPage() {
               setStep(3);
             }}
           />
-
-          <button onClick={()=>setStep(1)}>
-            Kembali
-          </button>
+          <button onClick={()=>setStep(1)}>Kembali</button>
         </>
       )}
 
       {/* STEP 3 */}
-      {step === 3 && customer && (
-        <>
-          <PaymentMethod
-            cart={cartItems}
-            customer={customer}
-          />
-
-          <button onClick={()=>setStep(2)}>
-            Kembali
-          </button>
-        </>
+      {step === 3 && (
+        <PaymentMethod
+          cart={cartItems}
+          customer={customer}
+          onBack={()=>setStep(2)}
+        />
       )}
 
     </div>

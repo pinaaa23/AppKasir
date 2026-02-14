@@ -1,3 +1,5 @@
+<h1>INI FILE ASLI</h1>
+
 import React from "react";
 
 export default function CheckoutSummary({ cartItems = [] }) {
