@@ -54,6 +54,7 @@ export default function Login({
 
   useEffect(() => {
     if (error) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLocalError(error)
     }
   }, [error])

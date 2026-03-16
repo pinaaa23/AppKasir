@@ -34,11 +34,11 @@ export default function CustomerForm({ onSubmit }) {
   };
 
   return (
-    <div style={{ marginBottom: "1.5rem" }}>
-      <h3 style={{ marginBottom: "1rem" }}>Data Pelanggan</h3>
+    <div className="card" style={{ maxWidth: "680px", margin: "0 auto 2rem" }}>
+      <h3>Data Pelanggan</h3>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label>
+      <div style={{ display: "flex", gap: "1.5rem", marginBottom: "1.5rem" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 600 }}>
           <input
             type="radio"
             checked={isNew}
@@ -47,7 +47,7 @@ export default function CustomerForm({ onSubmit }) {
           Buat akun baru
         </label>
 
-        <label style={{ marginLeft: "15px" }}>
+        <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontWeight: 600 }}>
           <input
             type="radio"
             checked={!isNew}
@@ -57,53 +57,55 @@ export default function CustomerForm({ onSubmit }) {
         </label>
       </div>
 
-      <input
-  name="name"
-  value={form.name}
-  placeholder="Nama"
-  onChange={handleChange}
-  style={styles.input}
-/>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1rem" }}>
+        <input
+          name="name"
+          value={form.name}
+          placeholder="Nama"
+          onChange={handleChange}
+          style={styles.input}
+        />
 
-<textarea
-  name="address"
-  value={form.address}
-  placeholder="Alamat"
-  onChange={handleChange}
-  style={styles.input}
-/>
+        <textarea
+          name="address"
+          value={form.address}
+          placeholder="Alamat"
+          onChange={handleChange}
+          style={styles.input}
+          rows={3}
+        />
 
-<input
-  name="phone"
-  value={form.phone}
-  placeholder="No WhatsApp"
-  onChange={handleChange}
-  style={styles.input}
-/>
+        <input
+          name="phone"
+          value={form.phone}
+          placeholder="No WhatsApp"
+          onChange={handleChange}
+          style={styles.input}
+        />
 
+        {isNew && (
+          <>
+            <input
+              name="email"
+              value={form.email}
+              placeholder="Email"
+              onChange={handleChange}
+              style={styles.input}
+            />
 
-      {isNew && (
-        <>
-          <input
-            name="email"
-            value={form.email}
-            placeholder="Email"
-            onChange={handleChange}
-            style={styles.input}
-          />
+            <input
+              name="password"
+              type="password"
+              value={form.password}
+              placeholder="Password"
+              onChange={handleChange}
+              style={styles.input}
+            />
+          </>
+        )}
+      </div>
 
-          <input
-            name="password"
-            type="password"
-            value={form.password}
-            placeholder="Password"
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </>
-      )}
-
-      <button onClick={handleSubmit} style={styles.button}>
+      <button onClick={handleSubmit} className="btn btn-primary" style={{ width: "100%", marginTop: "18px" }}>
         Lanjut ke Pembayaran
       </button>
     </div>

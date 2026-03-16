@@ -1,149 +1,114 @@
 export default function ReviewOrder({ cart, onNext }) {
 
   const total = cart.reduce(
-    (sum,item)=> sum + item.sell_price * item.quantity,
+    (sum, item) => sum + item.sell_price * item.quantity,
     0
   );
 
   return (
-    <div style={{
-      background:"#ffffff",
-      padding:"35px",
-      borderRadius:"22px",
-      boxShadow:"0 20px 50px rgba(0,0,0,0.06)"
-    }}>
-
-      {/* HEADER STEP */}
-      <div style={{
-        display:"flex",
-        alignItems:"center",
-        justifyContent:"space-between",
-        marginBottom:"30px"
-      }}>
-        <div style={{
-          fontSize:"24px",
-          fontWeight:"800"
-        }}>
-          Checkout
-        </div>
+    <div className="container" style={{ paddingTop: "3.5rem", paddingBottom: "3.5rem" }}>
+      <div className="card" style={{ maxWidth: "720px", margin: "0 auto" }}>
 
         <div style={{
-          background:"#eef2ff",
-          padding:"8px 16px",
-          borderRadius:"999px",
-          fontWeight:"600",
-          color:"#4338ca"
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          marginBottom: "24px"
         }}>
-          Step 1 - Review
-        </div>
-      </div>
-
-      <h2 style={{
-        marginBottom:"25px",
-        fontWeight:"700"
-      }}>
-        Review Pesanan
-      </h2>
-
-      {/* LIST PRODUK */}
-      <div style={{
-        display:"flex",
-        flexDirection:"column",
-        gap:"16px"
-      }}>
-        {cart.map((item,i)=>(
-          <div key={i} style={{
-            display:"flex",
-            justifyContent:"space-between",
-            alignItems:"center",
-            background:"#f9fafb",
-            padding:"18px",
-            borderRadius:"16px"
+          <div style={{
+            fontSize: "24px",
+            fontWeight: "800"
           }}>
+            Checkout
+          </div>
 
-            {/* LEFT */}
-            <div style={{
-              display:"flex",
-              alignItems:"center",
-              gap:"16px"
-            }}>
-              <img
-                src={item.image}
-                style={{
-                  width:"75px",
-                  height:"75px",
-                  borderRadius:"14px",
-                  objectFit:"cover",
-                  background:"#fff"
-                }}
-              />
+          <div style={{
+            background: "linear-gradient(130deg, #e0e7ff, #c7d2fe)",
+            padding: "10px 18px",
+            borderRadius: "999px",
+            fontWeight: "700",
+            color: "#1e40af"
+          }}>
+            Step 1 - Review
+          </div>
+        </div>
 
-              <div>
-                <div style={{
-                  fontSize:"17px",
-                  fontWeight:"700"
-                }}>
-                  {item.name}
-                </div>
+        <h3 style={{
+          marginBottom: "18px",
+          fontWeight: "800",
+          color: "#1e293b"
+        }}>
+          Review Pesanan
+        </h3>
 
-                <div style={{
-                  marginTop:"4px",
-                  color:"#6b7280"
-                }}>
-                  {item.quantity} Kg
+        <div style={{ display: "grid", gap: "14px" }}>
+          {cart.map((item, i) => (
+            <div key={i} className="list">
+              <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{
+                    width: "70px",
+                    height: "70px",
+                    borderRadius: "16px",
+                    objectFit: "cover",
+                    background: "#fff"
+                  }}
+                />
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: "17px", fontWeight: "800", color: "#0f172a" }}>
+                    {item.name}
+                  </div>
+                  <div style={{ marginTop: "4px", color: "#64748b", fontSize: "14px" }}>
+                    {item.quantity} Kg
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* PRICE */}
+              <div style={{ fontWeight: "800", fontSize: "18px", color: "#1e40af" }}>
+                Rp {(item.sell_price * item.quantity).toLocaleString("id-ID")}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{
+          marginTop: "30px",
+          paddingTop: "24px",
+          borderTop: "1px solid rgba(148, 163, 184, 0.35)"
+        }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-end"
+          }}>
             <div style={{
-              fontWeight:"800",
-              fontSize:"18px",
-              color:"#2563eb"
+              fontSize: "16px",
+              fontWeight: "700",
+              color: "#334155"
             }}>
-              Rp {(item.sell_price * item.quantity)
-                .toLocaleString("id-ID")}
+              Total Pembayaran
             </div>
-
+            <div style={{
+              fontSize: "28px",
+              fontWeight: "900",
+              color: "#0b1220"
+            }}>
+              Rp {total.toLocaleString("id-ID")}
+            </div>
           </div>
-        ))}
+        </div>
+
+        <button
+          onClick={onNext}
+          className="btn btn-primary"
+          style={{ width: "100%", marginTop: "28px" }}
+        >
+          Lanjut ke Data Customer →
+        </button>
+
       </div>
-
-      {/* TOTAL */}
-      <div style={{
-        marginTop:"30px",
-        paddingTop:"20px",
-        borderTop:"1px solid #e5e7eb",
-        display:"flex",
-        justifyContent:"space-between",
-        fontSize:"21px",
-        fontWeight:"800"
-      }}>
-        <span>Total Pembayaran</span>
-        <span>
-          Rp {total.toLocaleString("id-ID")}
-        </span>
-      </div>
-
-      {/* BUTTON */}
-      <button
-        onClick={onNext}
-        style={{
-          width:"100%",
-          marginTop:"30px",
-          padding:"16px",
-          borderRadius:"14px",
-          border:"none",
-          background:"#4f46e5",
-          color:"#fff",
-          fontSize:"16px",
-          fontWeight:"700",
-          cursor:"pointer"
-        }}
-      >
-        Lanjut ke Data Customer →
-      </button>
-
     </div>
   );
 }

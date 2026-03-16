@@ -1,4 +1,4 @@
-export default function Navbar({ setMenu, role, onLogout }) {
+export default function Navbar({ menu, setMenu, role, onLogout }) {
   return (
     <nav style={{
       background: "transparent",
@@ -37,8 +37,8 @@ export default function Navbar({ setMenu, role, onLogout }) {
               key={menuItem}
               onClick={() => setMenu(menuItem)}
               style={{
-                backgroundColor: "rgba(255,255,255,0.96)",
-                border: "1px solid rgba(16,24,40,0.06)",
+                backgroundColor: menu === menuItem ? "rgba(79,70,229,0.95)" : "rgba(255,255,255,0.96)",
+                border: menu === menuItem ? "1px solid rgba(79,70,229,0.7)" : "1px solid rgba(16,24,40,0.06)",
                 padding: "0.6rem 1.1rem",
                 fontSize: "0.95rem",
                 fontWeight: "700",
@@ -46,7 +46,7 @@ export default function Navbar({ setMenu, role, onLogout }) {
                 transition: "all 0.18s ease",
                 cursor: "pointer",
                 textTransform: "capitalize",
-                color: "var(--dark)",
+                color: menu === menuItem ? "#fff" : "var(--dark)",
                 letterSpacing: "0.3px",
                 minWidth: "92px",
                 textAlign: "center"

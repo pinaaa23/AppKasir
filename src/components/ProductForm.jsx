@@ -105,6 +105,27 @@ export default function ProductForm({ products, addProduct, updateProduct, editi
   return (
     <div className="card">
       <h3>{editing ? "Edit Produk" : "Tambah Produk"}</h3>
+
+      {editing && editingProduct && (
+        <div style={{ marginBottom: "1rem" }}>
+          <label style={{ display: "block", fontSize: "0.85rem", color: "#666", marginBottom: "0.25rem" }}>
+            ID Produk
+          </label>
+          <input
+            value={editingProduct.id}
+            disabled
+            style={{
+              width: "100%",
+              padding: "0.75rem",
+              border: "1px solid #ddd",
+              borderRadius: "6px",
+              background: "#f3f4f6",
+              color: "#555"
+            }}
+          />
+        </div>
+      )}
+
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
         <input
           placeholder="Nama Produk"

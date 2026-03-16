@@ -21,6 +21,13 @@ create table if not exists transactions (
   buy_price_at_sale numeric(12,2) not null,
   sell_price_at_sale numeric(12,2) not null,
   total numeric(14,2) not null,
+  status text not null default 'completed',
+  payment_method text,
+  invoice text,
+  customer_name text,
+  customer_phone text,
+  items jsonb,
+  proof_url text,
   created_at timestamptz default now()
 );
 

@@ -1,13 +1,58 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ProductGallery({ products }) {
   const navigate = useNavigate();
+  const cartButtonRef = useRef(null);
 
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
 
-  const addToCart = (product) => {
+  const animateImageToCart = (imageSrc, startRect) => {
+    const cartButton = cartButtonRef.current;
+    if (!cartButton) return;
+
+    const cartRect = cartButton.getBoundingClientRect();
+    const flyer = document.createElement("img");
+    flyer.src = imageSrc;
+    flyer.style.position = "fixed";
+    flyer.style.left = `${startRect.left}px`;
+    flyer.style.top = `${startRect.top}px`;
+    flyer.style.width = `${startRect.width}px`;
+    flyer.style.height = `${startRect.height}px`;
+    flyer.style.objectFit = "cover";
+    flyer.style.borderRadius = "12px";
+    flyer.style.transition = "transform 0.7s ease-in-out, opacity 0.7s ease-in-out";
+    flyer.style.zIndex = "9999";
+    flyer.style.pointerEvents = "none";
+
+    document.body.appendChild(flyer);
+
+    const startX = startRect.left + startRect.width / 2;
+    const startY = startRect.top + startRect.height / 2;
+    const endX = cartRect.left + cartRect.width / 2;
+    const endY = cartRect.top + cartRect.height / 2;
+
+    const deltaX = endX - startX;
+    const deltaY = endY - startY;
+
+    requestAnimationFrame(() => {
+      flyer.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0.25)`;
+      flyer.style.opacity = "0.2";
+    });
+
+    setTimeout(() => {
+      flyer.remove();
+    }, 800);
+  };
+
+  const addToCart = (product, event) => {
+    const imgElement = event.currentTarget.closest("[data-product-card]")?.querySelector("[data-product-image]");
+    if (imgElement) {
+      const rect = imgElement.getBoundingClientRect();
+      animateImageToCart(imgElement.src, rect);
+    }
+
     const existingItem = cart.find(item => item.id === product.id);
 
     if (existingItem) {
@@ -55,7 +100,11 @@ export default function ProductGallery({ products }) {
 
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "2rem" }}>
         <h2 style={{ color: "#1e88e5" }}>Katalog Produk</h2>
-        <button onClick={() => setShowCart(!showCart)} style={{ background: "#4caf50" }}>
+        <button
+          ref={cartButtonRef}
+          onClick={() => setShowCart(!showCart)}
+          style={{ background: "#4caf50" }}
+        >
           Keranjang ({totalItems})
         </button>
       </div>
@@ -65,6 +114,7 @@ export default function ProductGallery({ products }) {
         {products.map(product => (
           <div
             key={product.id}
+            data-product-card
             style={{
               background: "white",
               borderRadius: "10px",
@@ -81,6 +131,7 @@ export default function ProductGallery({ products }) {
               background: "#f5f5f5"
             }}>
               <img
+                data-product-image
                 src={product.image}
                 alt={product.name}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
@@ -93,7 +144,7 @@ export default function ProductGallery({ products }) {
             </p>
 
             <button
-              onClick={() => addToCart(product)}
+              onClick={(e) => addToCart(product, e)}
               style={{ background: "#4caf50", width: "100%" }}
             >
               + Tambah ke Keranjang

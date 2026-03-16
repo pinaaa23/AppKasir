@@ -10,7 +10,7 @@ export default function ProductList({ products, deleteProduct, onEdit }) {
   };
 
   return (
-    <div className="card">
+    <div className="card">  
       <h3>Daftar Produk</h3>
       {products.length === 0 && (
         <p style={{ textAlign: "center", color: "#999", padding: "2rem" }}>

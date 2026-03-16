@@ -16,6 +16,7 @@ import Transaction from "./components/Transaction";
 import Report from "./components/Report";
 
 import CheckoutPage from "./components/checkout/CheckoutPage";
+import QrisPayment from "./pages/QrisPayment.jsx";
 
 function App() {
   const [role, setRole] = useState(null);
@@ -45,7 +46,7 @@ function App() {
     deleteProduct,
   } = useProducts();
 
-  const { transactions, addTransaction } = useTransactions();
+  const { transactions, addTransaction, updateTransactionStatus, deleteTransaction } = useTransactions();
 
   if (!role) {
     return <RoleSelection setRole={setRole} />;
@@ -76,6 +77,8 @@ function App() {
     <BrowserRouter>
       <Routes>
 
+        <Route path="/qris" element={<QrisPayment />} />
+
         {/* halaman checkout */}
         <Route path="/checkout" element={<CheckoutPage />} />
 
@@ -85,6 +88,7 @@ function App() {
           element={
             <div>
               <Navbar
+                menu={menu}
                 setMenu={setMenu}
                 role={role}
                 onLogout={() => {
@@ -120,11 +124,17 @@ function App() {
                       products={products}
                       transactions={transactions}
                       addTransaction={addTransaction}
+                      updateTransactionStatus={updateTransactionStatus}
+                      deleteTransaction={deleteTransaction}
                     />
                   )}
 
                   {menu === "laporan" && (
-                    <Report transactions={transactions} />
+                    <Report
+                      transactions={transactions}
+                      deleteTransaction={deleteTransaction}
+                      addTransaction={addTransaction}
+                    />
                   )}
                 </div>
               )}

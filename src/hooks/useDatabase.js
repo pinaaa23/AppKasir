@@ -183,6 +183,14 @@ export const useTransactions = () => {
           weight: parseFloat(weight),
           price_per_kg: parseFloat(price),
           total: parseFloat(total),
+          items: [
+            {
+              name: productName,
+              quantity: parseFloat(weight),
+              sell_price: parseFloat(price),
+              total: parseFloat(total)
+            }
+          ],
           created_at: new Date().toISOString()
         }
         const updated = [newTransaction, ...transactions]
